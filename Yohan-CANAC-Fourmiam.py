@@ -8,9 +8,9 @@ import matplotlib.pyplot as mtpl
 #Création et initialisation des variable
 position= ""
 index = 0
-LABEL = row[1]
-TENANT = 6
-ABOUTISSANT = 7
+label = row[1]
+tenant = 6
+aboutissant = 7
 BI_MIN = 8
 BP_MIN = 9
 BI_MAX = 10
@@ -19,15 +19,13 @@ BP_MAX = 11
 #Création et initialisation d'un graph Newtworkx
 graph = ntx.Graph()
 
-#Import du fichier CSV
+#Import du fichier CSV, vérification d'absence de valeur "null"
 with open("VOIES_NM.csv") as csv_file:
 	reader_file = csv.reader(csv_file)
-
 	index = 0
 	for line in reader_file:
 		index += 1
-
-		if (line[TENANT] != "" and line[ABOUTISSANT] != ""):
+		if (line[tenant] != "" and line[aboutissant] != ""):
 			if (line[BI_MIN] == ""):
 				line[BI_MIN] = 1
 			else:
@@ -46,13 +44,13 @@ with open("VOIES_NM.csv") as csv_file:
 				line[BP_MAX] = int(line[BP_MAX])
 
 			#Calcul du poids des rues
-			POIDS = max(((line[BI_MAX] - line[BI_MIN])/2)+1, ((line[BP_MAX] - line[BP_MIN])/2)+1)
+			poids = max(((line[BI_MAX] - line[BI_MIN])/2)+1, ((line[BP_MAX] - line[BP_MIN])/2)+1)
 
 			#Ajout des liens entre les noeuds
-			graph.add_edge(line[TENANT], line[ABOUTISSANT], weight=POIDS, label=LABEL, pheromone=0)
+			graph.add_edge(line[tenant], line[aboutissant], weight=poids, label=label)
 
-#Configuration du Graph Networkx
-pos = ntx.spring_layout(graph)
+			#Configuration du Graph Networkx
+			pos = ntx.spring_layout(graph)
 
 #Affichage du graph et de ses paramètres
 ntx.draw_networkx_edges(graph, pos)
